@@ -8,9 +8,6 @@ import { BrowserProvider, Contract, computeAddress } from "ethers";
 import Company_logo from "../assets/Company_logo.png";
 
 const CompanyHome = (provider) => {
-  const { auth, setAuth } = useContext(AuthContext);
-  const { doclog, setDoclog } = useContext(DocumentStore);
-  const { acc, setAcc } = useContext(AllAccounts);
   const [file, setfile] = useState();
   const [cid, setCid] = useState("");
   const [tokenId, setTokenId] = useState();

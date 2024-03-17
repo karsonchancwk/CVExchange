@@ -6,7 +6,7 @@ import CandidateHome from "./CandidateHome";
 import CompanyHome from "./CompanyHome";
 
 const Homepage = ({ provider }) => {
-  // const { auth, setAuth } = useContext(AuthContext);
+  const auth = "Candidate";
 
   const [client, setClient] = useState();
 

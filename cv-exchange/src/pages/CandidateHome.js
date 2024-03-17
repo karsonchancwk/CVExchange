@@ -34,9 +34,7 @@ const CandidateHome = () => {
               console.log("uploaded sth");
             }}
           />
-          <Button onClick={() => file && uploadFile()}>
-            Upload file to IPFS & submit on Ethereum Chain
-          </Button>
+          <Button>Dummy</Button>
         </div>
       </Col>
       <Container className="text-muted fs-4">
