@@ -6,20 +6,21 @@ router.route("/login/:address").get(async (req, res) => {
   try {
     const address = req.params.address;
     const findUser = await User.findOne({ address }).populate("_resume");
-    return findUser;
+
+    res.apiResponse({ result: { findUser } });
   } catch (error) {
     res.apiError(error);
   }
 });
 
 //signup
-router.route("/signup/:address").get(async (req, res) => {
+router.route("/signup/:address").post(async (req, res) => {
   try {
     const address = req.params.address;
     const { name, role } = await req.body;
     if (await User.findOne({ address })) throw new Error("Old User");
     const newUser = await User.create({ address, name, role });
-    return newUser;
+    res.apiResponse({ result: { newUser } });
   } catch (error) {
     res.apiError(error);
   }
