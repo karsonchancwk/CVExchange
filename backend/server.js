@@ -4,8 +4,7 @@ const mongoose = require("mongoose");
 // const cors = require("cors");
 
 const connectDB = require("./connectDB");
-const Candidate = require("./models/CandidateModel");
-const Company = require("./models/CompanyModel");
+const Company = require("./models/UserModel");
 
 // dotenv.config();
 const app = express();
@@ -15,7 +14,12 @@ const PORT = 5000; // backend routing port
 app.use(express.static("public"));
 app.use(express.json({ limit: "10mb", extended: true }));
 app.use(express.urlencoded({ limit: "10mb", extended: false }));
+
 // app.use(cors());
+app.use((req, res, next) => {
+  console.log(req.method, req.originalUrl);
+  next();
+});
 
 // DB Connection
 // let gfs;
@@ -36,6 +40,7 @@ app.get("/api/status", (req, res) => {
   res.apiResponse({ result: { message: "Connection Established" } });
 });
 
+app.use("/api/user", require("./routes/userRoutes"));
 // app.use()
 // app.use("/api/users", require("./routes/userRoutes"));
 // app.use("/api/posts", require("./routes/postRoutes"));
