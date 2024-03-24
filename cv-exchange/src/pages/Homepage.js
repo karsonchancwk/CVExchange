@@ -6,7 +6,7 @@ import CandidateHome from "./CandidateHome";
 import CompanyHome from "./CompanyHome";
 
 const Homepage = ({ provider }) => {
-  const auth = "Candidate";
+  const auth = { role: "Candidate" };
 
   const [client, setClient] = useState();
 

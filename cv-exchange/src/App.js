@@ -9,7 +9,9 @@ import {
   ToggleButton,
 } from "react-bootstrap";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { BrowserProvider, Contract, computeAddress } from "ethers";
+import { BrowserProvider, parseEther, Contract, computeAddress } from "ethers";
+import { FiUpload } from "react-icons/fi";
+import { ImBin } from "react-icons/im";
 
 import Homepage from "./pages/Homepage";
 import AgileSoteria from "./assets/AgileSoteria.png";
@@ -17,12 +19,14 @@ import AgileSoteria from "./assets/AgileSoteria.png";
 import "./App.css";
 
 export const AuthContext = createContext(null);
-export const BACKEND_URL = "localhost:5000";
+export const BACKEND_URL = "http://localhost:5000";
 
 function App() {
   const [provider, setProvider] = useState();
   const [auth, setAuth] = useState();
   const [regForm, setRegForm] = useState({ name: "", role: "Candidate" });
+
+  const [cv, setCV] = useState();
 
   const connectMetamask = async () => {
     const cred = await window.ethereum.request({
@@ -49,7 +53,7 @@ function App() {
     //
     const result = await fetch(BACKEND_URL + "/api/user/signup/" + address, {
       method: "POST",
-      body: JSON.stringify(regForm),
+      body: regForm,
     });
     console.log(result);
   };
@@ -59,7 +63,7 @@ function App() {
     console.log(signer);
   };
 
-  const popover = (
+  const regAccPopover = (
     <Popover>
       <Popover.Header as="h3">
         Please enter your register details
@@ -92,11 +96,92 @@ function App() {
               ))}
             </ButtonGroup>
           </Form.Group>
+
           <Button onClick={regNewAccount}>Submit</Button>
         </Form>
       </Popover.Body>
     </Popover>
   );
+
+  const uploadCVPopover = (
+    <Popover>
+      <Popover.Header as="h3">Upload your Resume</Popover.Header>
+      <Popover.Body>
+        {/* <Form>
+          <Form.Group className="mb-3">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>You are signing up as</Form.Label>
+            <ButtonGroup>
+              {["Candidate", "Company"].map((radio, idx) => (
+                <ToggleButton
+                  key={idx}
+                  id={radio}
+                  type="radio"
+                  variant={regForm.role === radio ? "dark" : "light"}
+                  value={radio}
+                  checked={regForm.role === radio}
+                  onChange={(e) =>
+                    setRegForm({ ...regForm, role: e.currentTarget.value })
+                  }
+                >
+                  {radio}
+                </ToggleButton>
+              ))}
+            </ButtonGroup>
+          </Form.Group>
+          <Button onClick={regNewAccount}>Submit</Button>
+        </Form> */}
+        <input
+          type="file"
+          id="courseCoverPic"
+          name="image"
+          className="text-center uploadBox d-none"
+          onChange={(e) => setCV(e.target.files[0])}
+        />
+        <label
+          className="d-flex align-items-center justify-content-center mb-3"
+          style={{
+            padding: "2% 3%",
+            margin: "1% 0",
+            background: "#f3f5f5",
+            borderRadius: "0.5rem",
+            border: "1px solid rgba(0, 0, 0, 0.2)",
+            textAlign: "center",
+            width: "100%",
+            height: "fit-content",
+            minHeight: "5rem",
+            cursor: "pointer",
+          }}
+          htmlFor="courseCoverPic"
+        >
+          <FiUpload />
+        </label>
+
+        {cv && (
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <div>{cv?.name}</div>
+            <ImBin />
+          </div>
+        )}
+
+        <Button onClick={() => console.log(cv)}>Submit</Button>
+      </Popover.Body>
+    </Popover>
+  );
+
+  const sendTx = async () => {
+    const signer = await provider.getSigner();
+    const transactionHash = await signer.sendTransaction({
+      to: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      value: parseEther("5"),
+    }); // not working very working
+    console.log(transactionHash);
+  };
 
   return (
     <div className="App">
@@ -112,19 +197,30 @@ function App() {
                 Connect{provider && "ed"} to Metamask
               </Button>
 
+              <Button variant="link" onClick={() => connectMetamask()}>
+                Resume Explorer
+              </Button>
+
+              {/* <OverlayTrigger
+                trigger="click"
+                placement="bottom"
+                overlay={regAccPopover}
+              >
+                <Button variant="light">Register your Metamask account</Button>
+              </OverlayTrigger> */}
+
               <OverlayTrigger
                 trigger="click"
                 placement="bottom"
-                overlay={popover}
+                overlay={uploadCVPopover}
               >
-                <Button variant="success">
-                  Register your Metamask account
-                </Button>
+                <Button variant="dark">Upload your Resume</Button>
               </OverlayTrigger>
 
-              <Button onClick={() => getsigner()}>connect DB</Button>
+              {/* <Button onClick={() => getsigner()}>connect DB</Button> */}
               {/* <Button onClick={() => connectDB()}>connect DB</Button> */}
             </div>
+            {/* <Button onClick={() => sendTx()}>Submit</Button> */}
             <Routes>
               <Route
                 path="/"
