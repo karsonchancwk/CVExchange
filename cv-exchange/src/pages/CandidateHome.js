@@ -4,6 +4,7 @@ import {
   Container,
   Row,
   Col,
+  ToggleButton,
   Badge,
   Stack,
   OverlayTrigger,
@@ -18,13 +19,10 @@ const CandidateHome = () => {
   const cv = {
     uploadDate: "16/3/2024",
     edu: [
-      ["RMBI", "University of Science and Technology"],
-      ["DSE", "Diocesan Girls' School"],
+      "RMBI at University of Science and Technology",
+      "DSE at Diocesan Girls' School",
     ],
-    exp: [
-      ["Summer Analyst", "JP Morgan Chase"],
-      ["Finance Intern", "Deloitte"],
-    ],
+    exp: ["Summer Analyst in JP Morgan Chase", "Finance Intern in Deloitte"],
     skills: [
       "Project Management",
       "Professsional Accounting",
@@ -41,18 +39,6 @@ const CandidateHome = () => {
         <div className="fs-3 text-center fw-bold mt-3 mb-2">
           Resume Explorer
         </div>
-        {/* <div className="fs-4 text-center fw-bold">
-          Manage your Resume at ease
-        </div> */}
-        {/* <div className="d-flex justify-content-around my-4">
-          <input
-            type="file"
-            onChange={(e) => {
-              setfile(e.target.files[0]);
-              console.log("uploaded sth");
-            }}
-          />
-        </div> */}
       </Col>
       <Container className="text-muted fs-5">
         <Row className="mx-auto border-bottom border-3 my-2">
@@ -63,42 +49,57 @@ const CandidateHome = () => {
           <Col className="my-auto" xs={2}>
             <div className="py-auto">{cv?.uploadDate}</div>
           </Col>
-          <Col xs={10}>
-            <Row className="d-flex no-wrap my-3 gap-2">
-              <Stack direction="horizontal" gap={2}>
-                <p className="my-auto ">Experience</p>
-                {cv?.exp.map((exp) => (
-                  <Stack direction="horizontal" gap={1} className="mx-3">
-                    <Badge pill bg="success">
-                      {exp[0]}
-                    </Badge>
-                    at <Badge pill>{exp[1]}</Badge>
-                  </Stack>
-                ))}
-              </Stack>
 
-              <Stack direction="horizontal" gap={2}>
-                <p className="my-auto">Education</p>
+          <Container xs={10} as={Col}>
+            {/* Education */}
+            <Row className="d-flex justify-content-start align-items-start mb-1">
+              <Col className="my-auto" xs={2}>
+                Education
+              </Col>
+              <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
                 {cv?.edu.map((edu) => (
-                  <Stack direction="horizontal" gap={1} className="mx-3 wrap">
-                    <Badge pill bg="success">
-                      {edu[0]}
-                    </Badge>
-                    at <Badge pill>{edu[1]}</Badge>
-                  </Stack>
+                  <li>{edu}</li>
                 ))}
-              </Stack>
+              </Col>
+            </Row>
+            <hr className="w-100 p-0 m-1" />
 
-              <Stack direction="horizontal" gap={2}>
+            <Row className="d-flex justify-content-start align-items-start mb-1">
+              <Col className="my-auto" xs={2}>
+                Experience
+              </Col>
+              <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
+                {cv?.exp.map((exp) => (
+                  <li>{exp}</li>
+                ))}
+              </Col>
+            </Row>
+            <hr className="w-100 p-0 m-1" />
+
+            <Row className="d-flex justify-content-start align-items-start mb-3">
+              <Col className="my-auto" xs={2}>
+                Skills
+              </Col>
+              <Col className="d-flex flex-wrap align-items-start justify-content-start ms-2 mt-2 gap-2">
+                {cv?.skills.map((s) => (
+                  <ToggleButton
+                    variant="outline-dark"
+                    checked={false}
+                    className="pe-none py-1 px-2"
+                  >
+                    {s}
+                  </ToggleButton>
+                ))}
+              </Col>
+            </Row>
+
+            {/* <Stack direction="horizontal" gap={2}>
                 <p className="my-auto me-5">Skills</p>
                 {cv?.skills.map((s) => (
-                  <Badge pill bg="success">
-                    {s}
-                  </Badge>
+                  
                 ))}
-              </Stack>
-            </Row>
-          </Col>
+              </Stack> */}
+          </Container>
         </Row>
         {/* {doclog.reverse().map(
           (cv) =>

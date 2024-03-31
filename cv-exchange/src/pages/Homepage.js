@@ -26,26 +26,6 @@ const Homepage = ({ provider }) => {
   //   }
   // };
 
-  // const connectweb3Storage = async () => {
-  //   const client_ = await create();
-  //   setClient(client_);
-  //   try {
-  //     console.log("conncting web 3 storage");
-  //     const res1 = await client_.login("wing.hcccc@gmail.com");
-  //     console.log("res1", res1);
-
-  //     const res2 = await client_.setCurrentSpace(
-  //       "did:key:z6MkhSL8xPGYRyekTdL6baRATDgJXqpYhBdBKVwi1Ya4g2A4"
-  //     );
-  //     console.log("res2", res2);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-  // useEffect(() => {
-  //   connectweb3Storage();
-  // }, []);
-
   return (
     <div>
       {/* <Button onClick={() => fetchVal()}>fetchVal</Button> */}

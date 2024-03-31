@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { BrowserProvider, parseEther, Contract, computeAddress } from "ethers";
+import axios from "axios";
 import { FiUpload } from "react-icons/fi";
 import { ImBin } from "react-icons/im";
 
@@ -174,6 +175,13 @@ function App() {
     </Popover>
   );
 
+  const callAPI = async () => {
+    const result = await axios.post(BACKEND_URL + "/api/status", {
+      dataa: "hihihi",
+    });
+    console.log(result?.data);
+  };
+
   const sendTx = async () => {
     const signer = await provider.getSigner();
     const transactionHash = await signer.sendTransaction({
@@ -201,6 +209,8 @@ function App() {
                 Resume Explorer
               </Button>
 
+              <Button onClick={() => callAPI()}>Call API</Button>
+
               {/* <OverlayTrigger
                 trigger="click"
                 placement="bottom"
@@ -216,19 +226,14 @@ function App() {
               >
                 <Button variant="dark">Upload your Resume</Button>
               </OverlayTrigger>
-
-              {/* <Button onClick={() => getsigner()}>connect DB</Button> */}
-              {/* <Button onClick={() => connectDB()}>connect DB</Button> */}
             </div>
-            {/* <Button onClick={() => sendTx()}>Submit</Button> */}
             <Routes>
               <Route
                 path="/"
                 exact
                 element={<Homepage provider={provider} />}
               />
-              {/* <Route path="/pagetwo" exact element={<PageTwo />} /> */}
-              {/* <Route path="/AddRemoveParti" exact element={<AddRemoveParti />} /> */}
+              {/* <Route path="/pagetwo" exact element={<PageTwo />} />  <Route path="/AddRemoveParti" exact element={<AddRemoveParti />} /> */}
             </Routes>
           </Container>
         </AuthContext.Provider>

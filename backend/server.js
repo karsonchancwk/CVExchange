@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const connectDB = require("./connectDB");
-const Company = require("./models/UserModel");
 
 const middleware = require("./middleware");
 const { errorHandler } = require("./middleware/errorMiddleware");
@@ -42,30 +41,12 @@ app.use(errorHandler);
 // Router Connection
 // // app.use('/api/file', require('./routes/videoRoutes'));
 
-app.get("/api/status", (req, res) => {
+app.post("/api/status", (req, res) => {
+  console.log(req?.body);
   res.apiResponse({ result: { message: "Connection Established" } });
 });
 
 app.use("/api/user", require("./routes/userRoutes"));
-// app.use()
-// app.use("/api/users", require("./routes/userRoutes"));
-// app.use("/api/posts", require("./routes/postRoutes"));
-// app.use("/api/code", require("./routes/codeRoutes"));
-// app.use("/api/comments", require("./routes/commentRoutes"));
-// app.use("/api/courses", require("./routes/courseRoutes"));
-// app.use("/api/courseSeries", require("./routes/courseSeriesRoutes"));
-// app.use("/api/tutors", require("./routes/tutorRoutes"));
-// app.use("/api/contacts", require("./routes/metaDataRoutes"));
-// app.use("/api/blogs", require("./routes/blogRoutes"));
-// app.use("/api/students", require("./routes/studentRoutes"));
-// app.use("/api/mc", require("./routes/mcRoutes"));
-// app.use("/api/tasks", require("./routes/taskRoutes"));
-// app.use("/api/categories", require("./routes/categoryRoutes"));
-// app.use("/api/mcResponses", require("./routes/mcResponseRoutes"));
-
-// app.use("/api/videos", require("./routes/videoRoutes"));
-// app.use("/api/images", require("./routes/utilities"));
-// app.use("/api/transaction", require("./routes/transactionRoutes"));
 
 // https://localhost:4000/api/posts
 
