@@ -47,6 +47,7 @@ app.post("/api/status", (req, res) => {
 });
 
 app.use("/api/user", require("./routes/userRoutes"));
+app.use("/api/resume", require("./routes/resumeRoutes"));
 
 // https://localhost:4000/api/posts
 

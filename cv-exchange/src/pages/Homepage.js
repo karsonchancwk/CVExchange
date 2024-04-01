@@ -15,6 +15,7 @@ import axios from "axios";
 
 import { FiUpload } from "react-icons/fi";
 import { ImBin } from "react-icons/im";
+
 import MetaMask from "../assets/MetaMask.png";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
@@ -28,15 +29,26 @@ const Homepage = () => {
   const [regForm, setRegForm] = useState({ name: "", role: "Candidate" });
   const [cv, setCV] = useState();
 
-  const connectMetamask = async () => {
+  const signIn = async (e) => {
+    e.preventDefault();
     const cred = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
     if (typeof window.ethereum !== "undefined")
       setProvider(new BrowserProvider(window.ethereum));
-    console.log(cred);
-    setAuth(cred[0]);
-    return cred[0];
+
+    const address = cred[0];
+    console.log(address);
+
+    const res = await axios.get(BACKEND_URL + "/api/user/signin/" + address);
+    const user = res?.data?.result?.thisUser;
+    console.log("user", user);
+    setAuth({
+      name: user?.name,
+      role: user?.role,
+      address: user._id,
+      resume: user._resume,
+    });
   };
 
   const uploadCV = (
@@ -148,30 +160,33 @@ const Homepage = () => {
     </Popover>
   );
 
-  const [client, setClient] = useState();
-
-  const regNewAccount = async () => {
+  const signUp = async (e) => {
+    e.preventDefault();
     const cred = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
     if (typeof window.ethereum !== "undefined")
       setProvider(new BrowserProvider(window.ethereum));
-    console.log(cred);
-    setAuth(cred[0]);
+
     const address = cred[0];
     console.log(address);
     console.log(regForm);
-    //
-    const result = await fetch(BACKEND_URL + "/api/user/signup/" + address, {
-      method: "POST",
-      body: regForm,
+
+    const result = await axios.post(
+      BACKEND_URL + "/api/user/signup/" + address,
+      regForm
+    );
+    const user = result?.data?.result?.newUser;
+    setAuth({
+      name: user?.name,
+      role: user?.role,
+      address: user._id,
+      resume: [],
     });
-    console.log(result);
   };
 
   //  Candidate View
-  if (auth?.role === "Candidate")
-    return <CandidateHome provider={provider} client={client} />;
+  if (auth?.role === "Candidate") return <CandidateHome />;
   // Company View
   else if (auth?.role === "Company") return <CompanyHome provider={provider} />;
   // Not yet login
@@ -182,7 +197,7 @@ const Homepage = () => {
           className="d-flex align-items-center justify-content-around p-1 w-100 vh-75"
           style={{ marginTop: "6.5rem" }}
         >
-          <div onClick={connectMetamask} style={{ cursor: "pointer" }}>
+          <div onClick={signIn} style={{ cursor: "pointer" }}>
             <img src={MetaMask} height={300} />
             <h3>Sign in with Metamask</h3>
           </div>
@@ -235,9 +250,7 @@ const Homepage = () => {
                   </ButtonGroup>
                 </Form.Group>
 
-                <Button onClick={regNewAccount}>
-                  Submit and connect Metamask
-                </Button>
+                <Button onClick={signUp}>Submit and connect Metamask</Button>
               </Card.Body>
             </Form>
           </Card>
