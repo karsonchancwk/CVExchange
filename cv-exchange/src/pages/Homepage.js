@@ -1,43 +1,242 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Button, Dropdown, DropdownButton } from "react-bootstrap";
-import { Contract, computeAddress } from "ethers";
+import {
+  Container,
+  Col,
+  Button,
+  Card,
+  Popover,
+  Row,
+  Form,
+  ButtonGroup,
+  ToggleButton,
+} from "react-bootstrap";
+import { BrowserProvider, parseEther, Contract, computeAddress } from "ethers";
+import axios from "axios";
+
+import { FiUpload } from "react-icons/fi";
+import { ImBin } from "react-icons/im";
+import MetaMask from "../assets/MetaMask.png";
+
+import { AuthnProvContext, BACKEND_URL } from "../App";
 
 import CandidateHome from "./CandidateHome";
 import CompanyHome from "./CompanyHome";
 
-const Homepage = ({ provider }) => {
-  const auth = { role: "Candidate" };
+const Homepage = () => {
+  const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);
+
+  const [regForm, setRegForm] = useState({ name: "", role: "Candidate" });
+  const [cv, setCV] = useState();
+
+  const connectMetamask = async () => {
+    const cred = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    if (typeof window.ethereum !== "undefined")
+      setProvider(new BrowserProvider(window.ethereum));
+    console.log(cred);
+    setAuth(cred[0]);
+    return cred[0];
+  };
+
+  const uploadCV = (
+    <>
+      <input
+        type="file"
+        id="courseCoverPic"
+        className="text-center uploadBox d-none"
+        // onChange={(e) => setCV(e.target.files[0])}
+      />
+      <label
+        className="d-flex align-items-center justify-content-center mb-3"
+        style={{
+          padding: "2% 3%",
+          margin: "1% 0",
+          background: "#f3f5f5",
+          borderRadius: "0.5rem",
+          border: "1px solid rgba(0, 0, 0, 0.2)",
+          textAlign: "center",
+          width: "100%",
+          height: "fit-content",
+          minHeight: "5rem",
+          cursor: "pointer",
+        }}
+        htmlFor="courseCoverPic"
+      >
+        <FiUpload />
+      </label>
+
+      {cv && (
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <div>{cv?.name}</div>
+          <ImBin />
+        </div>
+      )}
+
+      <Button onClick={() => console.log(cv)}>Submit</Button>
+    </>
+  );
+
+  const uploadCVPopover = (
+    <Popover>
+      <Popover.Header as="h3">Upload your Resume</Popover.Header>
+      <Popover.Body>
+        {/* <Form>
+          <Form.Group className="mb-3">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>You are signing up as</Form.Label>
+            <ButtonGroup>
+              {["Candidate", "Company"].map((radio, idx) => (
+                <ToggleButton
+                  key={idx}
+                  id={radio}
+                  type="radio"
+                  variant={regForm.role === radio ? "dark" : "light"}
+                  value={radio}
+                  checked={regForm.role === radio}
+                  onChange={(e) =>
+                    setRegForm({ ...regForm, role: e.currentTarget.value })
+                  }
+                >
+                  {radio}
+                </ToggleButton>
+              ))}
+            </ButtonGroup>
+          </Form.Group>
+          <Button onClick={regNewAccount}>Submit</Button>
+        </Form> */}
+        <input
+          type="file"
+          id="courseCoverPic"
+          name="image"
+          className="text-center uploadBox d-none"
+          onChange={(e) => setCV(e.target.files[0])}
+        />
+        <label
+          className="d-flex align-items-center justify-content-center mb-3"
+          style={{
+            padding: "2% 3%",
+            margin: "1% 0",
+            background: "#f3f5f5",
+            borderRadius: "0.5rem",
+            border: "1px solid rgba(0, 0, 0, 0.2)",
+            textAlign: "center",
+            width: "100%",
+            height: "fit-content",
+            minHeight: "5rem",
+            cursor: "pointer",
+          }}
+          htmlFor="courseCoverPic"
+        >
+          <FiUpload />
+        </label>
+
+        {cv && (
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <div>{cv?.name}</div>
+            <ImBin />
+          </div>
+        )}
+
+        <Button onClick={() => console.log(cv)}>Submit</Button>
+      </Popover.Body>
+    </Popover>
+  );
 
   const [client, setClient] = useState();
 
-  // const fetchVal = async () => {
-  //   if (provider) {
-  //     const contract = new Contract(
-  //       CONTRACT_ADDRESS,
-  //       ContractJSON.abi,
-  //       provider
-  //     );
-  //     try {
-  //       const data = await contract.get();
-  //       console.log("data = " + data);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  // };
+  const regNewAccount = async () => {
+    const cred = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    if (typeof window.ethereum !== "undefined")
+      setProvider(new BrowserProvider(window.ethereum));
+    console.log(cred);
+    setAuth(cred[0]);
+    const address = cred[0];
+    console.log(address);
+    console.log(regForm);
+    //
+    const result = await fetch(BACKEND_URL + "/api/user/signup/" + address, {
+      method: "POST",
+      body: regForm,
+    });
+    console.log(result);
+  };
 
-  return (
-    <div>
-      {/* <Button onClick={() => fetchVal()}>fetchVal</Button> */}
+  //  Candidate View
+  if (auth?.role === "Candidate")
+    return <CandidateHome provider={provider} client={client} />;
+  // Company View
+  else if (auth?.role === "Company") return <CompanyHome provider={provider} />;
+  // Not yet login
+  else
+    return (
+      <Container>
+        <div
+          className="d-flex align-items-center justify-content-around p-1 w-100 vh-75"
+          style={{ marginTop: "6.5rem" }}
+        >
+          <img src={MetaMask} height={300} />
+          <div>Or</div>
+          <Card className="mx-4">
+            <Card.Header as="h3">Upload your Resume</Card.Header>
+            <Form>
+              <Card.Body className="py-5">
+                {/* Name */}
+                <Form.Group as={Row} className="mb-4">
+                  <Form.Label xs={3} className="mx-auto">
+                    Name
+                  </Form.Label>
+                  <Col xs={9} className="mx-auto">
+                    <Form.Control
+                      className="text-center"
+                      onChange={(e) =>
+                        setRegForm({ ...regForm, name: e.target.value })
+                      }
+                    />
+                  </Col>
+                </Form.Group>
 
-      {/* <Button onClick={() => console.log(client)}>print client</Button> */}
+                {/* Role */}
+                <Form.Group as={Row} className="mb-5">
+                  <Form.Label xs={5} className="mx-auto">
+                    You are signing up as
+                  </Form.Label>
+                  <ButtonGroup className="mx-auto">
+                    {["Candidate", "Company"].map((radio, idx) => (
+                      <ToggleButton
+                        key={idx}
+                        id={radio}
+                        type="radio"
+                        variant={regForm.role === radio ? "dark" : "light"}
+                        value={radio}
+                        checked={regForm.role === radio}
+                        onChange={(e) =>
+                          setRegForm({
+                            ...regForm,
+                            role: e.currentTarget.value,
+                          })
+                        }
+                      >
+                        {radio}
+                      </ToggleButton>
+                    ))}
+                  </ButtonGroup>
+                </Form.Group>
 
-      {auth?.role === "Candidate" && (
-        <CandidateHome provider={provider} client={client} />
-      )}
-      {auth?.role === "Company" && <CompanyHome provider={provider} />}
-    </div>
-  );
+                <Button onClick={regNewAccount}>Submit</Button>
+              </Card.Body>
+            </Form>
+          </Card>
+        </div>
+      </Container>
+    );
 };
 
 export default Homepage;
