@@ -182,10 +182,15 @@ const Homepage = () => {
           className="d-flex align-items-center justify-content-around p-1 w-100 vh-75"
           style={{ marginTop: "6.5rem" }}
         >
-          <img src={MetaMask} height={300} />
+          <div onClick={connectMetamask} style={{ cursor: "pointer" }}>
+            <img src={MetaMask} height={300} />
+            <h3>Sign in with Metamask</h3>
+          </div>
           <div>Or</div>
           <Card className="mx-4">
-            <Card.Header as="h3">Upload your Resume</Card.Header>
+            <Card.Header as="h4" className="px-4 py-2">
+              Sign up a new account with Metamask
+            </Card.Header>
             <Form>
               <Card.Body className="py-5">
                 {/* Name */}
@@ -230,7 +235,9 @@ const Homepage = () => {
                   </ButtonGroup>
                 </Form.Group>
 
-                <Button onClick={regNewAccount}>Submit</Button>
+                <Button onClick={regNewAccount}>
+                  Submit and connect Metamask
+                </Button>
               </Card.Body>
             </Form>
           </Card>

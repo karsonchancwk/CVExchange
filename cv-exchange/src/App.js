@@ -65,14 +65,6 @@ function App() {
               {/* <OverlayTrigger
                 trigger="click"
                 placement="bottom"
-                overlay={regAccPopover}
-              >
-                <Button variant="light">Register your Metamask account</Button>
-              </OverlayTrigger> */}
-
-              {/* <OverlayTrigger
-                trigger="click"
-                placement="bottom"
                 overlay={uploadCVPopover}
               >
                 <Button variant="dark">Upload your Resume</Button>
