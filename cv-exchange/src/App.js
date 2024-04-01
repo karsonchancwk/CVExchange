@@ -66,8 +66,6 @@ function App() {
               style={{ width: "inherit" }}
             >
               <img src={AgileSoteria} className="me-auto" height={65} />
-              {provider && <p>hv provider</p>}
-              {!provider && <p>dun hv provider</p>}
 
               {(auth?.address && (
                 <div className="d-flex flex-column align-items-end">

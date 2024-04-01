@@ -164,7 +164,7 @@ const CompanyHome = () => {
         <Row className="mx-auto border-bottom border-3 my-2">
           <Col xs={2}>Upload Date</Col>
           <Col xs={8}>Resumes</Col>
-          <Col xs={2}>Resumes</Col>
+          <Col xs={2}>More Actions</Col>
         </Row>
         {allCV?.reverse().map((cv) => (
           <Row className="mx-auto border border-3 my-3">

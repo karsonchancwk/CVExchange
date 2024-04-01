@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
 import {
   Button,
+  Dropdown,
+  DropdownButton,
+  ButtonGroup,
   Container,
   Row,
   Col,
@@ -8,6 +11,7 @@ import {
   Badge,
   Stack,
   OverlayTrigger,
+  Popover,
   Tooltip,
 } from "react-bootstrap";
 import { AbiCoder, Contract, Interface } from "ethers";
@@ -74,7 +78,8 @@ const CandidateHome = () => {
       <Container className="text-muted fs-5">
         <Row className="mx-auto border-bottom border-3 my-2">
           <Col xs={2}>Upload Date</Col>
-          <Col xs={10}>Key Information in Your Resume</Col>
+          <Col xs={8}>Key Information in Your Resume</Col>
+          <Col xs={2}>Any accessors/ View-requestors?</Col>
         </Row>
         {auth?.resume?.reverse().map((cv) => (
           <Row className="mx-auto border border-3 my-3">
@@ -84,7 +89,7 @@ const CandidateHome = () => {
               </div>
             </Col>
 
-            <Container xs={10} as={Col}>
+            <Container xs={8} as={Col}>
               {/* Education */}
               <Row className="d-flex justify-content-start align-items-start mb-1">
                 <Col className="my-auto" xs={2}>
@@ -133,6 +138,33 @@ const CandidateHome = () => {
                   
                 ))}
               </Stack> */}
+            </Container>
+
+            <Container xs={2} as={Col}>
+              <Col className="d-flex flex-wrap align-items-start justify-content-center ms-2 mt-2 gap-2">
+                {cv?.accessors?.map((u) => (
+                  <DropdownButton
+                    as={ButtonGroup}
+                    title={u.name}
+                    variant="success"
+                    className="pe-none"
+                  />
+                ))}
+                {cv?.requestors?.map((u) => (
+                  <DropdownButton
+                    as={ButtonGroup}
+                    title={u.name}
+                    variant="info"
+                  >
+                    <Dropdown.Item onClick={() => console.log("clicking it")}>
+                      Allow this company to view my Resume
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => console.log("clicking it")}>
+                      Remove this requestor
+                    </Dropdown.Item>
+                  </DropdownButton>
+                ))}
+              </Col>
             </Container>
           </Row>
         ))}

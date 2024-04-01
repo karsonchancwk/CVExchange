@@ -7,8 +7,15 @@ router.route("/signin/:address").get(async (req, res) => {
   try {
     const address = req.params.address;
     console.log(address);
-    const thisUser = await User.findOne({ _id: address }).populate("_resume");
+    const thisUser = await User.findOne({ _id: address }).populate({
+      path: "_resume",
+      populate: {
+        path: "accessors requestors",
+        select: "_id name",
+      },
+    });
     console.log(thisUser);
+
     res.apiResponse({ result: { thisUser } });
   } catch (error) {
     res.apiError(error);
