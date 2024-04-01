@@ -33,4 +33,33 @@ router.route("/new/:address").post(async (req, res) => {
   }
 });
 
+router.route("/allcv").get(async (req, res) => {
+  try {
+    const allCV = await Resume.find();
+    res.apiResponse({ result: { allCV } });
+  } catch (error) {
+    res.apiError(error);
+  }
+});
+
+router.route("/addrequestor/:address").patch(async (req, res) => {
+  try {
+    const address = req?.params?.address;
+    if (!address) throw new Error("No address");
+    console.log(address);
+
+    const cvid = req?.body?.cvid;
+    if (!cvid) throw new Error("No CV ID");
+    console.log(cvid);
+
+    const cv = await Resume.findByIdAndUpdate(
+      cvid,
+      { $push: { requestors: address } },
+      { new: true }
+    );
+    res.apiResponse({ result: { cv } });
+  } catch (error) {
+    res.apiError(error);
+  }
+});
 module.exports = router;

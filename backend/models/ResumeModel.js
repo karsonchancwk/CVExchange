@@ -5,7 +5,8 @@ const Resume = mongoose.Schema({
   exp: [{ type: String, required: true }],
   edu: [{ type: String, required: true }],
   skills: [{ type: String, required: true }],
-  accessors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  accessors: [{ type: String, ref: "User" }],
+  requestors: [{ type: String, ref: "User" }],
   createdAt: {
     type: Date,
     default: Date.now(),
