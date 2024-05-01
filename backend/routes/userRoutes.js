@@ -36,4 +36,24 @@ router.route("/signup/:address").post(async (req, res) => {
     res.apiError(error);
   }
 });
+
+router.route("/topup/:address").post(async (req, res) => {
+  try {
+    const address = req?.params?.address;
+    console.log(address);
+    console.log(req.body);
+    const amt = parseFloat(req.body.amt);
+    const thisUser = await User.findOneAndUpdate(
+      { _id: address },
+      { $inc: { balance: amt } },
+      { new: true }
+    );
+    console.log(thisUser);
+
+    res.apiResponse({ result: { thisUser } });
+  } catch (error) {
+    res.apiError(error);
+  }
+});
+
 module.exports = router;

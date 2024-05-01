@@ -15,6 +15,7 @@ import { AbiCoder, Contract, Interface } from "ethers";
 import axios from "axios";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
+import Wallet from "./Wallet";
 import Company_logo from "../assets/Company_logo.png";
 
 const CompanyHome = () => {
@@ -131,8 +132,8 @@ const CompanyHome = () => {
           </Modal.Header>
           <Modal.Body className="mb-4">
             You are not permitted by the Candidate to view the Resume. Do you
-            wish to spend 2 tokens to request viewing it? You will get your
-            token back if the candidate reject your request.{" "}
+            wish to spend 1 USD to request viewing it? You will get your money
+            back if the candidate reject your request.
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setModalCV(null)}>
@@ -164,7 +165,7 @@ const CompanyHome = () => {
         <Row className="mx-auto border-bottom border-3 my-2">
           <Col xs={2}>Upload Date</Col>
           <Col xs={8}>Resumes</Col>
-          <Col xs={2}>More Actions</Col>
+          <Col xs={2}>Remarks</Col>
         </Row>
         {allCV?.reverse().map((cv) => (
           <Row className="mx-auto border border-3 my-3">
@@ -176,14 +177,20 @@ const CompanyHome = () => {
 
             <Container xs={8} as={Col}>
               {/* Education */}
-              <Row className="my-2 fs-6 ms-3">Uploaded by {cv.owner}</Row>
+              <Row className="my-2 fs-6 ms-3">Uploaded by {cv.owner},</Row>
               <Row className="d-flex justify-content-start align-items-start mb-1">
                 <Col className="my-auto" xs={2}>
                   Education
                 </Col>
                 <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
-                  <li>{cv.edu[0]}</li>
-                  <li>......</li>
+                  {cv?.accessors.includes(auth.address) ? (
+                    cv.edu.map((edu) => <li>{edu}</li>)
+                  ) : (
+                    <>
+                      <li>{cv.edu[0]}</li>
+                      <li>......</li>
+                    </>
+                  )}
                 </Col>
               </Row>
               <hr className="w-100 p-0 m-1" />
@@ -193,8 +200,14 @@ const CompanyHome = () => {
                   Experience
                 </Col>
                 <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
-                  <li>{cv.exp[0]}</li>
-                  <li>......</li>
+                  {cv?.accessors.includes(auth.address) ? (
+                    cv.exp.map((exp) => <li>{exp}</li>)
+                  ) : (
+                    <>
+                      <li>{cv.exp[0]}</li>
+                      <li>......</li>
+                    </>
+                  )}
                 </Col>
               </Row>
               <hr className="w-100 p-0 m-1" />
@@ -204,7 +217,10 @@ const CompanyHome = () => {
                   Skills
                 </Col>
                 <Col className="d-flex flex-wrap align-items-start justify-content-start ms-2 mt-2 gap-2">
-                  {[cv?.skills[0], cv?.skills[1], "......"].map((s) => (
+                  {(cv?.accessors.includes(auth.address)
+                    ? cv?.skills
+                    : [cv?.skills[0], cv?.skills[1], "......"]
+                  ).map((s) => (
                     <ToggleButton
                       variant="outline-dark"
                       checked={false}
@@ -217,14 +233,21 @@ const CompanyHome = () => {
               </Row>
             </Container>
 
-            <Col className="my-auto" xs={2}>
-              <Button onClick={() => setModalCV(cv)}>View more</Button>
+            <Col className="my-auto px-2" xs={2}>
+              {!cv?.accessors.includes(auth.address) &&
+                !cv?.requestors.includes(auth.address) && (
+                  <Button onClick={() => setModalCV(cv)}>View more</Button>
+                )}
+              {!cv?.accessors.includes(auth.address) &&
+                cv?.requestors.includes(auth.address) &&
+                "Pending Candidates' Approval"}
             </Col>
           </Row>
         ))}
         <ThisModal />
         <Button onClick={() => console.log(allCV)}>hihi</Button>
       </Container>
+      <Wallet />
     </Container>
   );
 };

@@ -48,6 +48,7 @@ const Homepage = () => {
       role: user?.role,
       address: user._id,
       resume: user._resume,
+      balance: user.balance.$numberDecimal / 10.0,
     });
   };
 
@@ -182,6 +183,7 @@ const Homepage = () => {
       role: user?.role,
       address: user._id,
       resume: [],
+      balance: 0.0,
     });
   };
 

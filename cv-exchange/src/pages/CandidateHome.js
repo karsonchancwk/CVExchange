@@ -21,6 +21,7 @@ import { AuthnProvContext, BACKEND_URL } from "../App";
 
 import { FiUpload } from "react-icons/fi";
 import Candidate_logo from "../assets/Candidate_logo.png";
+import Wallet from "./Wallet";
 
 const CandidateHome = () => {
   const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);
@@ -76,7 +77,7 @@ const CandidateHome = () => {
         </div>
       </div>
       <Container className="text-muted fs-5">
-        <Row className="mx-auto border-bottom border-3 my-2">
+        <Row className="mx-auto border-bottom border-3 my-2 align-items-end">
           <Col xs={2}>Upload Date</Col>
           <Col xs={8}>Key Information in Your Resume</Col>
           <Col xs={2}>Any accessors/ View-requestors?</Col>
@@ -147,14 +148,19 @@ const CandidateHome = () => {
                     as={ButtonGroup}
                     title={u.name}
                     variant="success"
-                    className="pe-none"
-                  />
+                    autoClose={false}
+                  >
+                    <Dropdown.Item onClick={() => console.log("clicking it")}>
+                      Remove this company from the accessors list
+                    </Dropdown.Item>
+                  </DropdownButton>
                 ))}
                 {cv?.requestors?.map((u) => (
                   <DropdownButton
                     as={ButtonGroup}
                     title={u.name}
                     variant="info"
+                    autoClose={false}
                   >
                     <Dropdown.Item onClick={() => console.log("clicking it")}>
                       Allow this company to view my Resume
@@ -169,6 +175,7 @@ const CandidateHome = () => {
           </Row>
         ))}
       </Container>
+      <Wallet />
     </Container>
   );
 };
