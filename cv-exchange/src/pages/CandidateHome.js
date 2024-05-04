@@ -16,6 +16,7 @@ import {
 } from "react-bootstrap";
 import { AbiCoder, Contract, Interface } from "ethers";
 import axios from "axios";
+import { createWorker } from "tesseract.js";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
 
@@ -25,24 +26,42 @@ import Wallet from "./Wallet";
 
 const CandidateHome = () => {
   const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);
-
   const dummycv = {
     uploadDate: "16/3/2024",
     edu: [
-      "RMBI at University of Science and Technology",
-      "DSE at Diocesan Girls' School",
+      "RMBI at the University of Stress and Tension",
+      "DSE at Diocesan Boys' School",
     ],
-    exp: ["Summer Analyst in JP Morgan Chase", "Finance Intern in Deloitte"],
+    exp: ["Summer Analyst in KPMG", "Finance Intern in Deloitte"],
     skills: [
+      "Cypto trading",
       "Project Management",
       "Professsional Accounting",
       "Corperate Finance",
       "Communication",
       "MS Office",
+      "Lying Flat",
     ],
   };
 
   const submitCV = async (e) => {
+    e.preventDefault();
+    console.log(e.target.files[0]);
+
+    // const file = e.target.files[0];
+    // pdfToText(file)
+    //   .then((text) => {
+    //     console.log(text);
+    //     setText(text);
+    //   })
+    //   .catch((error) => console.error("Failed to extract text from pdf"));
+
+    // parseResumeString(text);
+    // const worker = await createWorker("eng");
+    // const ret = await worker.recognize(e.target.files[0]);
+    // console.log(ret.data.text);
+    // await worker.terminate();
+
     const res = await axios.post(
       BACKEND_URL + "/api/resume/new/" + auth.address,
       { cv: dummycv }
@@ -76,11 +95,21 @@ const CandidateHome = () => {
           <h4>Upload a new resume</h4>
         </div>
       </div>
-      <Container className="text-muted fs-5">
+      <Container className="text-muted fs-5 mb-5">
         <Row className="mx-auto border-bottom border-3 my-2 align-items-end">
           <Col xs={2}>Upload Date</Col>
           <Col xs={8}>Key Information in Your Resume</Col>
-          <Col xs={2}>Any accessors/ View-requestors?</Col>
+          <Col xs={2}>
+            Any{" "}
+            <Badge bg="success" className="fw-normal">
+              accessors
+            </Badge>
+            /{" "}
+            <Badge bg="warning" text="dark" className="fw-normal">
+              View-requestors
+            </Badge>{" "}
+            ?
+          </Col>
         </Row>
         {auth?.resume?.reverse().map((cv) => (
           <Row className="mx-auto border border-3 my-3">
@@ -148,7 +177,6 @@ const CandidateHome = () => {
                     as={ButtonGroup}
                     title={u.name}
                     variant="success"
-                    autoClose={false}
                   >
                     <Dropdown.Item onClick={() => console.log("clicking it")}>
                       Remove this company from the accessors list
@@ -159,8 +187,7 @@ const CandidateHome = () => {
                   <DropdownButton
                     as={ButtonGroup}
                     title={u.name}
-                    variant="info"
-                    autoClose={false}
+                    variant="warning"
                   >
                     <Dropdown.Item onClick={() => console.log("clicking it")}>
                       Allow this company to view my Resume

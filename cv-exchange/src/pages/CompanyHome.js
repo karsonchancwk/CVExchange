@@ -161,7 +161,7 @@ const CompanyHome = () => {
           A more trusted place for you to seek talents.
         </div>
       </Col>
-      <Container className="text-muted fs-5">
+      <Container className="text-muted fs-5 mb-5">
         <Row className="mx-auto border-bottom border-3 my-2">
           <Col xs={2}>Upload Date</Col>
           <Col xs={8}>Resumes</Col>
@@ -245,7 +245,6 @@ const CompanyHome = () => {
           </Row>
         ))}
         <ThisModal />
-        <Button onClick={() => console.log(allCV)}>hihi</Button>
       </Container>
       <Wallet />
     </Container>

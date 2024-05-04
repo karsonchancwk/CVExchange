@@ -16,7 +16,13 @@ import {
 } from "react-bootstrap";
 
 import axios from "axios";
-import { AbiCoder, Contract, Interface } from "ethers";
+import {
+  BrowserProvider,
+  parseEther,
+  Contract,
+  computeAddress,
+  Transaction,
+} from "ethers";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
 import { FaWallet } from "react-icons/fa6";
@@ -24,17 +30,37 @@ import { FaWallet } from "react-icons/fa6";
 const Wallet = () => {
   const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);
   const [amt, setAmt] = useState(0.0);
+  const [ethusdt, setEthusdt] = useState();
 
+  useEffect(() => {
+    fetchRate();
+  }, []);
+
+  const fetchRate = async (e = null) => {
+    e?.preventDefault();
+    setEthusdt(29000.1);
+  };
   const topUp = async (e) => {
     e.preventDefault();
     console.log("clicking it");
-    const res = await axios.post(
-      BACKEND_URL + "/api/user/topup/" + auth.address,
-      { amt: amt * 29000.0 }
-    );
-    const user = res?.data?.result?.thisUser;
-    console.log("user", user);
-    setAuth({ ...auth, balance: user.balance.$numberDecimal / 10.0 });
+    try {
+      const signer = await provider.getSigner();
+      const transactionHash = await signer.sendUncheckedTransaction({
+        to: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        value: parseEther(String(amt)),
+      });
+      console.log(transactionHash);
+      const res = await axios.post(
+        BACKEND_URL + "/api/user/topup/" + auth.address,
+        { amt }
+      );
+      const user = res?.data?.result?.thisUser;
+      console.log("user", user);
+      setAuth({ ...auth, balance: user.balance.$numberDecimal });
+      setAmt(0.0);
+    } catch (err) {
+      alert("The transaction is unsuccessful");
+    }
   };
 
   return (
@@ -46,22 +72,31 @@ const Wallet = () => {
           <Popover.Header as="h3">Your Wallet</Popover.Header>
           <Popover.Body>
             Your Balance:{" "}
-            {auth?.balance ? (auth?.balance / 2900).toFixed(8) : "0.00"} ETH
+            {auth?.balance ? parseFloat(auth?.balance).toFixed(8) : "0.00"} ETH
             <p className="text-muted">
-              ({auth?.balance ? parseFloat(auth?.balance).toFixed(2) : "0.00"}{" "}
+              (
+              {auth?.balance
+                ? (parseFloat(auth?.balance) * ethusdt).toFixed(2)
+                : "0.00"}{" "}
               USD)
             </p>
             <Form.Label htmlFor="topup" className="mt-2">
               Top up
             </Form.Label>
-            <InputGroup className="mb-2">
+            <InputGroup className="mb-3">
               <InputGroup.Text id="basic-addon3">ETH</InputGroup.Text>
               <Form.Control
                 id="topup"
+                value={amt}
                 onChange={(e) => setAmt(e.target.value)}
               />
             </InputGroup>
-            <Button onClick={topUp}>Confirm</Button>
+            <Button onClick={topUp} className="me-2">
+              Confirm
+            </Button>
+            <Button variant="outline-primary" onClick={fetchRate}>
+              Refresh rate
+            </Button>
           </Popover.Body>
         </Popover>
       }
