@@ -20,7 +20,7 @@ import AgileSoteria from "./assets/AgileSoteria.png";
 import "./App.css";
 
 export const AuthnProvContext = createContext(null);
-export const BACKEND_URL = "http://localhost:5000";
+export const BACKEND_URL = "https://cvexchange.onrender.com";
 
 function App() {
   const [provider, setProvider] = useState();
