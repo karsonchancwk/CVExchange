@@ -16,7 +16,6 @@ import {
 } from "react-bootstrap";
 import { AbiCoder, Contract, Interface } from "ethers";
 import axios from "axios";
-import { createWorker } from "tesseract.js";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
 
