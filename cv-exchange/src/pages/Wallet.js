@@ -1,28 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import {
   Button,
-  Container,
   Form,
-  Row,
-  Col,
-  ToggleButton,
-  Modal,
-  Badge,
   Popover,
-  Stack,
   OverlayTrigger,
   InputGroup,
-  Tooltip,
 } from "react-bootstrap";
 
 import axios from "axios";
-import {
-  BrowserProvider,
-  parseEther,
-  Contract,
-  computeAddress,
-  Transaction,
-} from "ethers";
+import { parseEther } from "ethers";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
 import { FaWallet } from "react-icons/fa6";
@@ -38,8 +24,17 @@ const Wallet = () => {
 
   const fetchRate = async (e = null) => {
     e?.preventDefault();
-    setEthusdt(29000.1);
+    try {
+      const rate = await axios.get(
+        "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
+      );
+      setEthusdt(parseFloat(rate?.data?.price));
+    } catch (err) {
+      alert("Could not fetch price for now. Price set at 29000.");
+      setEthusdt(29000.0);
+    }
   };
+
   const topUp = async (e) => {
     e.preventDefault();
     console.log("clicking it");

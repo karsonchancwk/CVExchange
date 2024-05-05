@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
   Container,
   Col,
@@ -10,7 +10,7 @@ import {
   ButtonGroup,
   ToggleButton,
 } from "react-bootstrap";
-import { BrowserProvider, parseEther, Contract, computeAddress } from "ethers";
+import { BrowserProvider } from "ethers";
 import axios from "axios";
 
 import { FiUpload } from "react-icons/fi";

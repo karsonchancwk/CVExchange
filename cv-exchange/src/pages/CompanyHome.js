@@ -6,12 +6,7 @@ import {
   Col,
   ToggleButton,
   Modal,
-  Badge,
-  Stack,
-  OverlayTrigger,
-  Tooltip,
 } from "react-bootstrap";
-import { AbiCoder, Contract, Interface } from "ethers";
 import axios from "axios";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";

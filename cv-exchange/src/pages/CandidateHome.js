@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   Button,
   Dropdown,
@@ -9,15 +9,11 @@ import {
   Col,
   ToggleButton,
   Badge,
-  Stack,
-  OverlayTrigger,
-  Popover,
-  Tooltip,
 } from "react-bootstrap";
-import { AbiCoder, Contract, Interface } from "ethers";
 import axios from "axios";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
+import dummycv from "../assets/DummyCV.json";
 
 import { FiUpload } from "react-icons/fi";
 import Candidate_logo from "../assets/Candidate_logo.png";
@@ -25,23 +21,6 @@ import Wallet from "./Wallet";
 
 const CandidateHome = () => {
   const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);
-  const dummycv = {
-    uploadDate: "16/3/2024",
-    edu: [
-      "RMBI at the University of Stress and Tension",
-      "DSE at Diocesan Boys' School",
-    ],
-    exp: ["Summer Analyst in KPMG", "Finance Intern in Deloitte"],
-    skills: [
-      "Cypto trading",
-      "Project Management",
-      "Professsional Accounting",
-      "Corperate Finance",
-      "Communication",
-      "MS Office",
-      "Lying Flat",
-    ],
-  };
 
   const submitCV = async (e) => {
     e.preventDefault();
@@ -60,13 +39,16 @@ const CandidateHome = () => {
     // const ret = await worker.recognize(e.target.files[0]);
     // console.log(ret.data.text);
     // await worker.terminate();
-
+    const randno = Math.floor(Math.random() * 10);
     const res = await axios.post(
       BACKEND_URL + "/api/resume/new/" + auth.address,
-      { cv: dummycv }
+      { cv: dummycv[randno] }
     );
     console.log(res.data);
-    setAuth({ ...auth, resume: [...auth?.resume, dummycv] });
+    setAuth({
+      ...auth,
+      resume: [{ ...dummycv[randno], createdAt: Date.now() }, ...auth?.resume],
+    });
   };
 
   return (
