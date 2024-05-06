@@ -13,10 +13,10 @@ import {
 import axios from "axios";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
-import dummycv from "../assets/DummyCV.json";
+import dummycv from "/cv-exchange/src/assets/DummyCV.json";
 
 import { FiUpload } from "react-icons/fi";
-import Candidate_logo from "../assets/Candidate_logo.png";
+import Candidate_logo from "/cv-exchange/src/assets/Candidate_logo.png";
 import Wallet from "./Wallet";
 
 const CandidateHome = () => {

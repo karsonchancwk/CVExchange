@@ -7,7 +7,7 @@ import axios from "axios";
 import { BiSolidUserCircle } from "react-icons/bi";
 
 import Homepage from "./pages/Homepage";
-import AgileSoteria from "./assets/AgileSoteria.png";
+import AgileSoteria from "/cv-exchange/src/assets/AgileSoteria.png";
 
 import "./App.css";
 
