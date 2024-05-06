@@ -7,7 +7,7 @@ import axios from "axios";
 import { BiSolidUserCircle } from "react-icons/bi";
 
 import Homepage from "./pages/Homepage";
-import AgileSoteria from "/cv-exchange/src/assets/AgileSoteria.png";
+import AgileSoteria from "./assets/AgileSoteria.png";
 
 import "./App.css";
 
@@ -96,10 +96,11 @@ function App() {
                 <Button variant="dark">Upload your Resume</Button>
               </OverlayTrigger> */}
             </div>
-            <Routes>
-              <Route path="/" exact element={<Homepage />} />
-              {/* <Route path="/pagetwo" exact element={<PageTwo />} />  <Route path="/AddRemoveParti" exact element={<AddRemoveParti />} /> */}
-            </Routes>
+            <Homepage />
+            {/*<Routes>
+              <Route path="/" exact element={} />
+               <Route path="/pagetwo" exact element={<PageTwo />} />  <Route path="/AddRemoveParti" exact element={<AddRemoveParti />} /> 
+            </Routes>*/}
           </Container>
         </AuthnProvContext.Provider>
       </BrowserRouter>
