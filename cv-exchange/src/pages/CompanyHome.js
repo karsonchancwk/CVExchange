@@ -11,7 +11,7 @@ import axios from "axios";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
 import Wallet from "./Wallet";
-import Company_logo from "../assets/Company_logo.png";
+import Company_logo from "/cv-exchange/src/assets/Company_logo.png";
 
 const CompanyHome = () => {
   const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);

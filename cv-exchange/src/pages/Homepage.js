@@ -16,7 +16,7 @@ import axios from "axios";
 import { FiUpload } from "react-icons/fi";
 import { ImBin } from "react-icons/im";
 
-import MetaMask from "../assets/MetaMask.png";
+import MetaMask from "/cv-exchange/src/assets/MetaMask.png";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
 
