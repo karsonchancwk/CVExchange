@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 
 import { AuthnProvContext, BACKEND_URL } from "../App";
-import dummycv from "/cv-exchange/src/assets/DummyCV.json";
+import dummycv from "../assets/DummyCV.json";
 
 import { FiUpload } from "react-icons/fi";
 import Candidate_logo from "../assets/Candidate_logo.png";
