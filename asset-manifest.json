@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/CVExchange/static/css/main.3ca7a510.css",
-    "main.js": "/CVExchange/static/js/main.b5c504ef.js",
+    "main.js": "/CVExchange/static/js/main.88399a78.js",
     "static/media/AgileSoteria.png": "/CVExchange/static/media/AgileSoteria.7214ee4a5d407373407e.png",
     "static/media/MetaMask.png": "/CVExchange/static/media/MetaMask.5558899230b38bdf0b77.png",
     "static/media/Candidate_logo.png": "/CVExchange/static/media/Candidate_logo.17300eb9fbccb3ed6cbb.png",
     "index.html": "/CVExchange/index.html",
     "main.3ca7a510.css.map": "/CVExchange/static/css/main.3ca7a510.css.map",
-    "main.b5c504ef.js.map": "/CVExchange/static/js/main.b5c504ef.js.map"
+    "main.88399a78.js.map": "/CVExchange/static/js/main.88399a78.js.map"
   },
   "entrypoints": [
     "static/css/main.3ca7a510.css",
-    "static/js/main.b5c504ef.js"
+    "static/js/main.88399a78.js"
   ]
 }
