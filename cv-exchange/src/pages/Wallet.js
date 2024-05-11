@@ -31,7 +31,7 @@ const Wallet = () => {
       setEthusdt(parseFloat(rate?.data?.price));
     } catch (err) {
       alert("Could not fetch price for now. Price set at 29000.");
-      setEthusdt(29000.0);
+      setEthusdt(2900.0);
     }
   };
 

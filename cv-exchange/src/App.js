@@ -1,8 +1,6 @@
 import React, { useState, createContext } from "react";
 import { Container } from "react-bootstrap";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { parseEther } from "ethers";
-import axios from "axios";
+import { BrowserRouter } from "react-router-dom";
 
 import { BiSolidUserCircle } from "react-icons/bi";
 
