@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import {
-  Button,
   Dropdown,
   DropdownButton,
   ButtonGroup,
@@ -25,20 +24,6 @@ const CandidateHome = () => {
   const submitCV = async (e) => {
     e.preventDefault();
     console.log(e.target.files[0]);
-
-    // const file = e.target.files[0];
-    // pdfToText(file)
-    //   .then((text) => {
-    //     console.log(text);
-    //     setText(text);
-    //   })
-    //   .catch((error) => console.error("Failed to extract text from pdf"));
-
-    // parseResumeString(text);
-    // const worker = await createWorker("eng");
-    // const ret = await worker.recognize(e.target.files[0]);
-    // console.log(ret.data.text);
-    // await worker.terminate();
     const randno = Math.floor(Math.random() * 10);
     const res = await axios.post(
       BACKEND_URL + "/api/resume/new/" + auth.address,
@@ -47,7 +32,57 @@ const CandidateHome = () => {
     console.log(res.data);
     setAuth({
       ...auth,
-      resume: [{ ...dummycv[randno], createdAt: Date.now() }, ...auth?.resume],
+      resume: [...auth?.resume, { ...dummycv[randno], createdAt: Date.now() }],
+    });
+  };
+
+  const reqToAccessors = async (cv, u) => {
+    const rate = await axios.get(
+      "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
+    );
+    console.log(rate);
+    const res = await axios.post(
+      BACKEND_URL + "/api/user/topup/" + auth.address,
+      { amt: 1.0 / rate?.data?.price }
+    );
+    const user = res?.data?.result?.thisUser;
+    console.log("user", user);
+    setAuth({
+      ...auth,
+      resume: [
+        ...auth.resume.filter((r) => r._id !== cv._id),
+        {
+          ...cv,
+          accessors: [...cv.accessors, u],
+          requestors: cv.requestors.filter((req) => req._id !== u._id),
+        },
+      ],
+      balance: user.balance.$numberDecimal,
+    });
+  };
+
+  const rmReqestors = (cv, u) => {
+    setAuth({
+      ...auth,
+      resume: [
+        ...auth.resume.filter((r) => r._id !== cv._id),
+        {
+          ...cv,
+          requestors: cv.requestors.filter((req) => req._id !== u._id),
+        },
+      ],
+    });
+  };
+  const rmAccessors = (cv, u) => {
+    setAuth({
+      ...auth,
+      resume: [
+        ...auth.resume.filter((r) => r._id !== cv._id),
+        {
+          ...cv,
+          accessors: cv.accessors.filter((ac) => ac._id !== u._id),
+        },
+      ],
     });
   };
 
@@ -159,7 +194,12 @@ const CandidateHome = () => {
                     title={u.name}
                     variant="success"
                   >
-                    <Dropdown.Item onClick={() => console.log("clicking it")}>
+                    <Dropdown.Item
+                      onClick={(e) => {
+                        e.preventDefault();
+                        rmAccessors(cv, u);
+                      }}
+                    >
                       Remove this company from the accessors list
                     </Dropdown.Item>
                   </DropdownButton>
@@ -170,10 +210,20 @@ const CandidateHome = () => {
                     title={u.name}
                     variant="warning"
                   >
-                    <Dropdown.Item onClick={() => console.log("clicking it")}>
+                    <Dropdown.Item
+                      onClick={(e) => {
+                        e.preventDefault();
+                        reqToAccessors(cv, u);
+                      }}
+                    >
                       Allow this company to view my Resume
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => console.log("clicking it")}>
+                    <Dropdown.Item
+                      onClick={(e) => {
+                        e.preventDefault();
+                        rmReqestors(cv, u);
+                      }}
+                    >
                       Remove this requestor
                     </Dropdown.Item>
                   </DropdownButton>
@@ -183,6 +233,7 @@ const CandidateHome = () => {
           </Row>
         ))}
       </Container>
+
       <Wallet />
     </Container>
   );

@@ -12,12 +12,14 @@ import axios from "axios";
 import { AuthnProvContext, BACKEND_URL } from "../App";
 import Wallet from "./Wallet";
 import Company_logo from "../assets/Company_logo.png";
+import { parseEther } from "ethers";
 
 const CompanyHome = () => {
   const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);
 
   const [allCV, setAllCV] = useState([]);
   const [modalCV, setModalCV] = useState(null);
+  const [ethusdt, setEthusdt] = useState();
 
   const fetchAllCV = async () => {
     const res = await axios.get(BACKEND_URL + "/api/resume/allcv");
@@ -25,24 +27,47 @@ const CompanyHome = () => {
 
     setAllCV(res?.data?.result?.allCV);
   };
+  const fetchRate = async (e = null) => {
+    e?.preventDefault();
+    try {
+      const rate = await axios.get(
+        "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
+      );
+      setEthusdt(parseFloat(rate?.data?.price));
+    } catch (err) {
+      setEthusdt(2932.0);
+    }
+  };
   useEffect(() => {
     fetchAllCV();
+    fetchRate();
   }, []);
 
   const requestViewCV = async (cvid) => {
     console.log(cvid);
-    const res = await axios.patch(
-      BACKEND_URL + "/api/resume/addrequestor/" + auth.address,
-      { cvid }
-    );
-    console.log(res?.data?.result);
-    fetchAllCV();
-    setModalCV(null);
+    fetchRate();
+    try {
+      const signer = await provider.getSigner();
+      const transactionHash = await signer.sendUncheckedTransaction({
+        to: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        value: parseEther(String((1.0 / ethusdt).toFixed(6))),
+      });
+      console.log(transactionHash);
+      const res = await axios.patch(
+        BACKEND_URL + "/api/resume/addrequestor/" + auth.address,
+        { cvid }
+      );
+      console.log(res?.data?.result);
+      fetchAllCV();
+      setModalCV(null);
+    } catch (e) {
+      alert("The transaction is unsuccessful");
+    }
   };
 
   const ThisModal = () => {
     const cv = modalCV;
-    console.log(cv?.accessors.includes(auth.address));
+    // console.log(cv?.accessors.includes(auth.address));
 
     // He has access
     if (cv?.accessors.includes(auth.address))
@@ -127,8 +152,9 @@ const CompanyHome = () => {
           </Modal.Header>
           <Modal.Body className="mb-4">
             You are not permitted by the Candidate to view the Resume. Do you
-            wish to spend 1 USD to request viewing it? You will get your money
-            back if the candidate reject your request.
+            wish to spend {ethusdt && (1.0 / ethusdt).toFixed(8)} ETH (around 1
+            USD) to request viewing it? You will get your money back if the
+            candidate reject your request.
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setModalCV(null)}>
