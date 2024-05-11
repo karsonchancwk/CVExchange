@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import {
-  Button,
   Dropdown,
   DropdownButton,
   ButtonGroup,
@@ -234,7 +233,7 @@ const CandidateHome = () => {
           </Row>
         ))}
       </Container>
-      <Button onClick={() => console.log(auth)}>print auth</Button>
+
       <Wallet />
     </Container>
   );
