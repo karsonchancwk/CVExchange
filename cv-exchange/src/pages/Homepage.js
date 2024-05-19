@@ -52,114 +52,114 @@ const Homepage = () => {
     });
   };
 
-  const uploadCV = (
-    <>
-      <input
-        type="file"
-        id="courseCoverPic"
-        className="text-center uploadBox d-none"
-        // onChange={(e) => setCV(e.target.files[0])}
-      />
-      <label
-        className="d-flex align-items-center justify-content-center mb-3"
-        style={{
-          padding: "2% 3%",
-          margin: "1% 0",
-          background: "#f3f5f5",
-          borderRadius: "0.5rem",
-          border: "1px solid rgba(0, 0, 0, 0.2)",
-          textAlign: "center",
-          width: "100%",
-          height: "fit-content",
-          minHeight: "5rem",
-          cursor: "pointer",
-        }}
-        htmlFor="courseCoverPic"
-      >
-        <FiUpload />
-      </label>
+  // const uploadCV = (
+  //   <>
+  //     <input
+  //       type="file"
+  //       id="courseCoverPic"
+  //       className="text-center uploadBox d-none"
+  //       // onChange={(e) => setCV(e.target.files[0])}
+  //     />
+  //     <label
+  //       className="d-flex align-items-center justify-content-center mb-3"
+  //       style={{
+  //         padding: "2% 3%",
+  //         margin: "1% 0",
+  //         background: "#f3f5f5",
+  //         borderRadius: "0.5rem",
+  //         border: "1px solid rgba(0, 0, 0, 0.2)",
+  //         textAlign: "center",
+  //         width: "100%",
+  //         height: "fit-content",
+  //         minHeight: "5rem",
+  //         cursor: "pointer",
+  //       }}
+  //       htmlFor="courseCoverPic"
+  //     >
+  //       <FiUpload />
+  //     </label>
 
-      {cv && (
-        <div className="d-flex align-items-center justify-content-between mb-3">
-          <div>{cv?.name}</div>
-          <ImBin />
-        </div>
-      )}
+  //     {cv && (
+  //       <div className="d-flex align-items-center justify-content-between mb-3">
+  //         <div>{cv?.name}</div>
+  //         <ImBin />
+  //       </div>
+  //     )}
 
-      <Button onClick={() => console.log(cv)}>Submit</Button>
-    </>
-  );
+  //     <Button onClick={() => console.log(cv)}>Submit</Button>
+  //   </>
+  // );
 
-  const uploadCVPopover = (
-    <Popover>
-      <Popover.Header as="h3">Upload your Resume</Popover.Header>
-      <Popover.Body>
-        {/* <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>You are signing up as</Form.Label>
-            <ButtonGroup>
-              {["Candidate", "Company"].map((radio, idx) => (
-                <ToggleButton
-                  key={idx}
-                  id={radio}
-                  type="radio"
-                  variant={regForm.role === radio ? "dark" : "light"}
-                  value={radio}
-                  checked={regForm.role === radio}
-                  onChange={(e) =>
-                    setRegForm({ ...regForm, role: e.currentTarget.value })
-                  }
-                >
-                  {radio}
-                </ToggleButton>
-              ))}
-            </ButtonGroup>
-          </Form.Group>
-          <Button onClick={regNewAccount}>Submit</Button>
-        </Form> */}
-        <input
-          type="file"
-          id="courseCoverPic"
-          name="image"
-          className="text-center uploadBox d-none"
-          onChange={(e) => setCV(e.target.files[0])}
-        />
-        <label
-          className="d-flex align-items-center justify-content-center mb-3"
-          style={{
-            padding: "2% 3%",
-            margin: "1% 0",
-            background: "#f3f5f5",
-            borderRadius: "0.5rem",
-            border: "1px solid rgba(0, 0, 0, 0.2)",
-            textAlign: "center",
-            width: "100%",
-            height: "fit-content",
-            minHeight: "5rem",
-            cursor: "pointer",
-          }}
-          htmlFor="courseCoverPic"
-        >
-          <FiUpload />
-        </label>
+  // const uploadCVPopover = (
+  //   <Popover>
+  //     <Popover.Header as="h3">Upload your Resume</Popover.Header>
+  //     <Popover.Body>
+  //       {/* <Form>
+  //         <Form.Group className="mb-3">
+  //           <Form.Label>Name</Form.Label>
+  //           <Form.Control
+  //             onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+  //           />
+  //         </Form.Group>
+  //         <Form.Group className="mb-3">
+  //           <Form.Label>You are signing up as</Form.Label>
+  //           <ButtonGroup>
+  //             {["Candidate", "Company"].map((radio, idx) => (
+  //               <ToggleButton
+  //                 key={idx}
+  //                 id={radio}
+  //                 type="radio"
+  //                 variant={regForm.role === radio ? "dark" : "light"}
+  //                 value={radio}
+  //                 checked={regForm.role === radio}
+  //                 onChange={(e) =>
+  //                   setRegForm({ ...regForm, role: e.currentTarget.value })
+  //                 }
+  //               >
+  //                 {radio}
+  //               </ToggleButton>
+  //             ))}
+  //           </ButtonGroup>
+  //         </Form.Group>
+  //         <Button onClick={regNewAccount}>Submit</Button>
+  //       </Form> */}
+  //       <input
+  //         type="file"
+  //         id="courseCoverPic"
+  //         name="image"
+  //         className="text-center uploadBox d-none"
+  //         onChange={(e) => setCV(e.target.files[0])}
+  //       />
+  //       <label
+  //         className="d-flex align-items-center justify-content-center mb-3"
+  //         style={{
+  //           padding: "2% 3%",
+  //           margin: "1% 0",
+  //           background: "#f3f5f5",
+  //           borderRadius: "0.5rem",
+  //           border: "1px solid rgba(0, 0, 0, 0.2)",
+  //           textAlign: "center",
+  //           width: "100%",
+  //           height: "fit-content",
+  //           minHeight: "5rem",
+  //           cursor: "pointer",
+  //         }}
+  //         htmlFor="courseCoverPic"
+  //       >
+  //         <FiUpload />
+  //       </label>
 
-        {cv && (
-          <div className="d-flex align-items-center justify-content-between mb-3">
-            <div>{cv?.name}</div>
-            <ImBin />
-          </div>
-        )}
+  //       {cv && (
+  //         <div className="d-flex align-items-center justify-content-between mb-3">
+  //           <div>{cv?.name}</div>
+  //           <ImBin />
+  //         </div>
+  //       )}
 
-        <Button onClick={() => console.log(cv)}>Submit</Button>
-      </Popover.Body>
-    </Popover>
-  );
+  //       <Button onClick={() => console.log(cv)}>Submit</Button>
+  //     </Popover.Body>
+  //   </Popover>
+  // );
 
   const signUp = async (e) => {
     e.preventDefault();

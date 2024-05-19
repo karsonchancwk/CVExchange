@@ -9,19 +9,14 @@ The frontend file in .\cv-exchange contains code building up the user interface,
 
 For the first time setting up the project
 
-```
-
-npm install
-npm i bootstrap
-
-```
+`npm install`
 
 To start this react project and run our localhost:3000
 `npm start`
 
 ## Backend
 
-The backend file in .\backend contains code building up APIs that connect with the MongoDB database
+The backend file in .\backend contains code building up APIs that connect with the MongoDB database. The code is written in nodejs. The node version I am using is v20.3.0
 `cd backend`
 
 For the first time setting up the project
@@ -29,6 +24,7 @@ For the first time setting up the project
 
 To start this nodejs project and run our localhost:5000
 `node server.js`
+
 
 ## The blockchain
 
