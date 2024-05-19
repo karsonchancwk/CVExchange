@@ -10,18 +10,17 @@ The frontend file in .\cv-exchange contains code building up the user interface,
 cd cv-exchange
 ```
 
+
 For the first time setting up the project
-
-
 ```
 npm install
 ```
 
 To start this react project and run our localhost:3000
-
 ```
 npm start
 ```
+
 
 ## Backend
 
@@ -31,14 +30,13 @@ The backend file in .\backend contains code building up APIs that connect with t
 cd backend
 ```
 
-For the first time setting up the project
 
+For the first time setting up the project
 ```
 npm install
 ```
 
 To start this nodejs project and run our localhost:5000
-
 ```
 node server.js
 ```
@@ -52,14 +50,14 @@ Setting up this locally run blockchain aims to simulate the real ETH blockchain 
 cd blockchain
 ```
 
-For the first time setting up the project
 
+For the first time setting up the project
 ```
 npm install
 ```
 
-Run the following to start the blockchain node running at localhost:8545. It also provides you dummy private keys and blockchain transaction records mined locally. 
 
+Run the following to start the blockchain node running at localhost:8545. It also provides you dummy private keys and blockchain transaction records mined locally. 
 ```
 npx hardhat node
 ```
@@ -72,7 +70,7 @@ Connect your metamask with Chrome and localhost:8545
 
 Adding testing address to Metamask
 1. Click on the arrow to the right of "Alice Au"
- ![Metamask page](metamask-popup.png)
+![Metamask page](metamask-popup.png)
 2. Click on "Add account or hardware wallet" -> "Import an account"
 3. Enter a private key. You may choose to use the ones from your blockchain node command
 4. Go ahead with any transaction in the web application
