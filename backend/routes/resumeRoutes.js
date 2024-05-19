@@ -62,4 +62,69 @@ router.route("/addrequestor/:address").patch(async (req, res) => {
     res.apiError(error);
   }
 });
+
+router.route("/rmrequestor/:cvid").patch(async (req, res) => {
+  try {
+    const cvid = req?.params?.cvid;
+    if (!cvid) throw new Error("No CV ID");
+    console.log(cvid);
+
+    const address = req?.body?.address;
+    if (!address) throw new Error("No address");
+    console.log(address);
+
+    const cv = await Resume.findByIdAndUpdate(
+      cvid,
+      { $pull: { requestors: address } },
+      { new: true }
+    );
+    res.apiResponse({ result: { cv } });
+  } catch (error) {
+    res.apiError(error);
+  }
+});
+
+router.route("/rmaccessors/:cvid").patch(async (req, res) => {
+  try {
+    const cvid = req?.params?.cvid;
+    if (!cvid) throw new Error("No CV ID");
+    console.log(cvid);
+
+    const address = req?.body?.address;
+    if (!address) throw new Error("No address");
+    console.log(address);
+
+    const cv = await Resume.findByIdAndUpdate(
+      cvid,
+      { $pull: { accessors: address } },
+      { new: true }
+    );
+    res.apiResponse({ result: { cv } });
+  } catch (error) {
+    res.apiError(error);
+  }
+});
+
+router.route("/addaccessorsRmRequ/:cvid").patch(async (req, res) => {
+  try {
+    const cvid = req?.params?.cvid;
+    if (!cvid) throw new Error("No CV ID");
+    console.log(cvid);
+
+    const address = req?.body?.address;
+    if (!address) throw new Error("No address");
+    console.log(address);
+
+    const cv = await Resume.findByIdAndUpdate(
+      cvid,
+      { $pull: { requestors: address }, $push: { accessors: address } },
+      { new: true }
+    );
+
+    res.apiResponse({ result: { cv } });
+  } catch (error) {
+    res.apiError(error);
+  }
+});
+
 module.exports = router;

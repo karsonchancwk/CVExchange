@@ -47,7 +47,13 @@ router.route("/topup/:address").post(async (req, res) => {
       { _id: address },
       { $inc: { balance: amt } },
       { new: true }
-    );
+    ).populate({
+      path: "_resume",
+      populate: {
+        path: "accessors requestors",
+        select: "_id name",
+      },
+    });
     console.log(thisUser);
 
     res.apiResponse({ result: { thisUser } });

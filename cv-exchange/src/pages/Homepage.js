@@ -13,8 +13,8 @@ import {
 import { BrowserProvider } from "ethers";
 import axios from "axios";
 
-import { FiUpload } from "react-icons/fi";
-import { ImBin } from "react-icons/im";
+// import { FiUpload } from "react-icons/fi";
+// import { ImBin } from "react-icons/im";
 
 import MetaMask from "../assets/MetaMask.png";
 

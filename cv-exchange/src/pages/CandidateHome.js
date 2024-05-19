@@ -21,6 +21,21 @@ import Wallet from "./Wallet";
 const CandidateHome = () => {
   const { auth, setAuth, provider, setProvider } = useContext(AuthnProvContext);
 
+  const updatePage = async () => {
+    const res = await axios.get(
+      BACKEND_URL + "/api/user/signin/" + auth?.address
+    );
+    const user = res?.data?.result?.thisUser;
+    console.log("user", user);
+    setAuth({
+      name: user?.name,
+      role: user?.role,
+      address: user._id,
+      resume: user._resume,
+      balance: user.balance.$numberDecimal,
+    });
+  };
+
   const submitCV = async (e) => {
     e.preventDefault();
     console.log(e.target.files[0]);
@@ -30,13 +45,16 @@ const CandidateHome = () => {
       { cv: dummycv[randno] }
     );
     console.log(res.data);
-    setAuth({
-      ...auth,
-      resume: [...auth?.resume, { ...dummycv[randno], createdAt: Date.now() }],
-    });
+    updatePage();
   };
 
-  const reqToAccessors = async (cv, u) => {
+  const reqToAccessors = async (cvid, uid) => {
+    const updatedCV = await axios.patch(
+      BACKEND_URL + "/api/resume/addaccessorsRmRequ/" + cvid,
+      { address: uid }
+    );
+    console.log(updatedCV);
+
     const rate = await axios.get(
       "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
     );
@@ -48,42 +66,30 @@ const CandidateHome = () => {
     const user = res?.data?.result?.thisUser;
     console.log("user", user);
     setAuth({
-      ...auth,
-      resume: [
-        {
-          ...cv,
-          accessors: [...cv.accessors, u],
-          requestors: cv.requestors.filter((req) => req._id !== u._id),
-        },
-        ...auth.resume.filter((r) => r._id !== cv._id),
-      ],
+      name: user?.name,
+      role: user?.role,
+      address: user._id,
+      resume: user._resume,
       balance: user.balance.$numberDecimal,
     });
   };
 
-  const rmReqestors = (cv, u) => {
-    setAuth({
-      ...auth,
-      resume: [
-        ...auth.resume.filter((r) => r._id !== cv._id),
-        {
-          ...cv,
-          requestors: cv.requestors.filter((req) => req._id !== u._id),
-        },
-      ],
-    });
+  const rmReqestors = async (cvid, uid) => {
+    const updatedCV = await axios.patch(
+      BACKEND_URL + "/api/resume/rmrequestor/" + cvid,
+      { address: uid }
+    );
+    console.log(updatedCV);
+    updatePage();
   };
-  const rmAccessors = (cv, u) => {
-    setAuth({
-      ...auth,
-      resume: [
-        ...auth.resume.filter((r) => r._id !== cv._id),
-        {
-          ...cv,
-          accessors: cv.accessors.filter((ac) => ac._id !== u._id),
-        },
-      ],
-    });
+
+  const rmAccessors = async (cvid, uid) => {
+    const updatedCV = await axios.patch(
+      BACKEND_URL + "/api/resume/rmaccessors/" + cvid,
+      { address: uid }
+    );
+    console.log(updatedCV);
+    updatePage();
   };
 
   return (
@@ -127,111 +133,113 @@ const CandidateHome = () => {
             ?
           </Col>
         </Row>
-        {auth?.resume?.reverse().map((cv) => (
-          <Row className="mx-auto border border-3 my-3">
-            <Col className="my-auto" xs={2}>
-              <div className="py-auto">
-                {new Date(cv?.createdAt).toDateString()}
-              </div>
-            </Col>
+        {auth?.resume
+          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .map((cv) => (
+            <Row className="mx-auto border border-3 my-3">
+              <Col className="my-auto" xs={2}>
+                <div className="py-auto">
+                  {new Date(cv?.createdAt).toDateString()}
+                </div>
+              </Col>
 
-            <Container xs={8} as={Col}>
-              {/* Education */}
-              <Row className="d-flex justify-content-start align-items-start mb-1">
-                <Col className="my-auto" xs={2}>
-                  Education
-                </Col>
-                <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
-                  {cv?.edu.map((edu) => (
-                    <li>{edu}</li>
-                  ))}
-                </Col>
-              </Row>
-              <hr className="w-100 p-0 m-1" />
+              <Container xs={8} as={Col}>
+                {/* Education */}
+                <Row className="d-flex justify-content-start align-items-start mb-1">
+                  <Col className="my-auto" xs={2}>
+                    Education
+                  </Col>
+                  <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
+                    {cv?.edu?.map((edu) => (
+                      <li>{edu}</li>
+                    ))}
+                  </Col>
+                </Row>
+                <hr className="w-100 p-0 m-1" />
 
-              <Row className="d-flex justify-content-start align-items-start mb-1">
-                <Col className="my-auto" xs={2}>
-                  Experience
-                </Col>
-                <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
-                  {cv?.exp.map((exp) => (
-                    <li>{exp}</li>
-                  ))}
-                </Col>
-              </Row>
-              <hr className="w-100 p-0 m-1" />
+                <Row className="d-flex justify-content-start align-items-start mb-1">
+                  <Col className="my-auto" xs={2}>
+                    Experience
+                  </Col>
+                  <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
+                    {cv?.exp.map((exp) => (
+                      <li>{exp}</li>
+                    ))}
+                  </Col>
+                </Row>
+                <hr className="w-100 p-0 m-1" />
 
-              <Row className="d-flex justify-content-start align-items-start mb-3">
-                <Col className="my-auto" xs={2}>
-                  Skills
-                </Col>
-                <Col className="d-flex flex-wrap align-items-start justify-content-start ms-2 mt-2 gap-2">
-                  {cv?.skills.map((s) => (
-                    <ToggleButton
-                      variant="outline-dark"
-                      checked={false}
-                      className="pe-none py-1 px-2"
-                    >
-                      {s}
-                    </ToggleButton>
-                  ))}
-                </Col>
-              </Row>
+                <Row className="d-flex justify-content-start align-items-start mb-3">
+                  <Col className="my-auto" xs={2}>
+                    Skills
+                  </Col>
+                  <Col className="d-flex flex-wrap align-items-start justify-content-start ms-2 mt-2 gap-2">
+                    {cv?.skills.map((s) => (
+                      <ToggleButton
+                        variant="outline-dark"
+                        checked={false}
+                        className="pe-none py-1 px-2"
+                      >
+                        {s}
+                      </ToggleButton>
+                    ))}
+                  </Col>
+                </Row>
 
-              {/* <Stack direction="horizontal" gap={2}>
+                {/* <Stack direction="horizontal" gap={2}>
                 <p className="my-auto me-5">Skills</p>
                 {cv?.skills.map((s) => (
                   
                 ))}
               </Stack> */}
-            </Container>
+              </Container>
 
-            <Container xs={2} as={Col}>
-              <Col className="d-flex flex-wrap align-items-start justify-content-center ms-2 mt-2 gap-2">
-                {cv?.accessors?.map((u) => (
-                  <DropdownButton
-                    as={ButtonGroup}
-                    title={u.name}
-                    variant="success"
-                  >
-                    <Dropdown.Item
-                      onClick={(e) => {
-                        e.preventDefault();
-                        rmAccessors(cv, u);
-                      }}
+              <Container xs={2} as={Col}>
+                <Col className="d-flex flex-wrap align-items-start justify-content-center ms-2 mt-2 gap-2">
+                  {cv?.accessors?.map((u) => (
+                    <DropdownButton
+                      as={ButtonGroup}
+                      title={u.name}
+                      variant="success"
                     >
-                      Remove this company from the accessors list
-                    </Dropdown.Item>
-                  </DropdownButton>
-                ))}
-                {cv?.requestors?.map((u) => (
-                  <DropdownButton
-                    as={ButtonGroup}
-                    title={u.name}
-                    variant="warning"
-                  >
-                    <Dropdown.Item
-                      onClick={(e) => {
-                        e.preventDefault();
-                        reqToAccessors(cv, u);
-                      }}
+                      <Dropdown.Item
+                        onClick={(e) => {
+                          e.preventDefault();
+                          rmAccessors(cv._id, u._id);
+                        }}
+                      >
+                        Remove this company from the accessors list
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  ))}
+                  {cv?.requestors?.map((u) => (
+                    <DropdownButton
+                      as={ButtonGroup}
+                      title={u.name}
+                      variant="warning"
                     >
-                      Allow this company to view my Resume
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={(e) => {
-                        e.preventDefault();
-                        rmReqestors(cv, u);
-                      }}
-                    >
-                      Remove this requestor
-                    </Dropdown.Item>
-                  </DropdownButton>
-                ))}
-              </Col>
-            </Container>
-          </Row>
-        ))}
+                      <Dropdown.Item
+                        onClick={(e) => {
+                          e.preventDefault();
+                          reqToAccessors(cv._id, u._id);
+                        }}
+                      >
+                        Allow this company to view my Resume
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={(e) => {
+                          e.preventDefault();
+                          rmReqestors(cv._id, u._id);
+                        }}
+                      >
+                        Remove this requestor
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  ))}
+                </Col>
+              </Container>
+            </Row>
+          ))}
       </Container>
 
       <Wallet />

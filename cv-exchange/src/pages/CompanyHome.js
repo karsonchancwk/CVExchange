@@ -189,83 +189,85 @@ const CompanyHome = () => {
           <Col xs={8}>Resumes</Col>
           <Col xs={2}>Remarks</Col>
         </Row>
-        {allCV?.reverse().map((cv) => (
-          <Row className="mx-auto border border-3 my-3">
-            <Col className="my-auto" xs={2}>
-              <div className="py-auto">
-                {new Date(cv?.createdAt).toDateString()}
-              </div>
-            </Col>
+        {allCV
+          ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .map((cv) => (
+            <Row className="mx-auto border border-3 my-3">
+              <Col className="my-auto" xs={2}>
+                <div className="py-auto">
+                  {new Date(cv?.createdAt).toDateString()}
+                </div>
+              </Col>
 
-            <Container xs={8} as={Col}>
-              {/* Education */}
-              <Row className="my-2 fs-6 ms-3">Uploaded by {cv.owner},</Row>
-              <Row className="d-flex justify-content-start align-items-start mb-1">
-                <Col className="my-auto" xs={2}>
-                  Education
-                </Col>
-                <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
-                  {cv?.accessors.includes(auth.address) ? (
-                    cv.edu.map((edu) => <li>{edu}</li>)
-                  ) : (
-                    <>
-                      <li>{cv.edu[0]}</li>
-                      <li>......</li>
-                    </>
+              <Container xs={8} as={Col}>
+                {/* Education */}
+                <Row className="my-2 fs-6 ms-3">Uploaded by {cv.owner}</Row>
+                <Row className="d-flex justify-content-start align-items-start mb-1">
+                  <Col className="my-auto" xs={2}>
+                    Education
+                  </Col>
+                  <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
+                    {cv?.accessors.includes(auth.address) ? (
+                      cv.edu.map((edu) => <li>{edu}</li>)
+                    ) : (
+                      <>
+                        <li>{cv.edu[0]}</li>
+                        <li>......</li>
+                      </>
+                    )}
+                  </Col>
+                </Row>
+                <hr className="w-100 p-0 m-1" />
+
+                <Row className="d-flex justify-content-start align-items-start mb-1">
+                  <Col className="my-auto" xs={2}>
+                    Experience
+                  </Col>
+                  <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
+                    {cv?.accessors.includes(auth.address) ? (
+                      cv.exp.map((exp) => <li>{exp}</li>)
+                    ) : (
+                      <>
+                        <li>{cv.exp[0]}</li>
+                        <li>......</li>
+                      </>
+                    )}
+                  </Col>
+                </Row>
+                <hr className="w-100 p-0 m-1" />
+
+                <Row className="d-flex justify-content-start align-items-start mb-3">
+                  <Col className="my-auto" xs={2}>
+                    Skills
+                  </Col>
+                  <Col className="d-flex flex-wrap align-items-start justify-content-start ms-2 mt-2 gap-2">
+                    {(cv?.accessors.includes(auth.address)
+                      ? cv?.skills
+                      : [cv?.skills[0], cv?.skills[1], "......"]
+                    ).map((s) => (
+                      <ToggleButton
+                        variant="outline-dark"
+                        checked={false}
+                        className="pe-none py-1 px-2"
+                      >
+                        {s}
+                      </ToggleButton>
+                    ))}
+                  </Col>
+                </Row>
+              </Container>
+
+              <Col className="my-auto px-2" xs={2}>
+                {!cv?.accessors.includes(auth.address) &&
+                  !cv?.requestors.includes(auth.address) && (
+                    <Button onClick={() => setModalCV(cv)}>View more</Button>
                   )}
-                </Col>
-              </Row>
-              <hr className="w-100 p-0 m-1" />
-
-              <Row className="d-flex justify-content-start align-items-start mb-1">
-                <Col className="my-auto" xs={2}>
-                  Experience
-                </Col>
-                <Col className="d-flex flex-column align-items-start justify-content-center ms-2">
-                  {cv?.accessors.includes(auth.address) ? (
-                    cv.exp.map((exp) => <li>{exp}</li>)
-                  ) : (
-                    <>
-                      <li>{cv.exp[0]}</li>
-                      <li>......</li>
-                    </>
-                  )}
-                </Col>
-              </Row>
-              <hr className="w-100 p-0 m-1" />
-
-              <Row className="d-flex justify-content-start align-items-start mb-3">
-                <Col className="my-auto" xs={2}>
-                  Skills
-                </Col>
-                <Col className="d-flex flex-wrap align-items-start justify-content-start ms-2 mt-2 gap-2">
-                  {(cv?.accessors.includes(auth.address)
-                    ? cv?.skills
-                    : [cv?.skills[0], cv?.skills[1], "......"]
-                  ).map((s) => (
-                    <ToggleButton
-                      variant="outline-dark"
-                      checked={false}
-                      className="pe-none py-1 px-2"
-                    >
-                      {s}
-                    </ToggleButton>
-                  ))}
-                </Col>
-              </Row>
-            </Container>
-
-            <Col className="my-auto px-2" xs={2}>
-              {!cv?.accessors.includes(auth.address) &&
-                !cv?.requestors.includes(auth.address) && (
-                  <Button onClick={() => setModalCV(cv)}>View more</Button>
-                )}
-              {!cv?.accessors.includes(auth.address) &&
-                cv?.requestors.includes(auth.address) &&
-                "Pending Candidates' Approval"}
-            </Col>
-          </Row>
-        ))}
+                {!cv?.accessors.includes(auth.address) &&
+                  cv?.requestors.includes(auth.address) &&
+                  "Pending Candidates' Approval"}
+              </Col>
+            </Row>
+          ))}
         <ThisModal />
       </Container>
       <Wallet />
