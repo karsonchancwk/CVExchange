@@ -80,6 +80,17 @@ const CandidateHome = () => {
       { address: uid }
     );
     console.log(updatedCV);
+
+    const rate = await axios.get(
+      "https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT"
+    );
+    console.log(rate);
+    const res = await axios.post(BACKEND_URL + "/api/user/topup/" + uid, {
+      amt: 1.0 / rate?.data?.price,
+    });
+    const user = res?.data?.result?.thisUser;
+    console.log("user", user);
+
     updatePage();
   };
 
