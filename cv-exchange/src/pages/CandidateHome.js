@@ -50,12 +50,12 @@ const CandidateHome = () => {
     setAuth({
       ...auth,
       resume: [
-        ...auth.resume.filter((r) => r._id !== cv._id),
         {
           ...cv,
           accessors: [...cv.accessors, u],
           requestors: cv.requestors.filter((req) => req._id !== u._id),
         },
+        ...auth.resume.filter((r) => r._id !== cv._id),
       ],
       balance: user.balance.$numberDecimal,
     });

@@ -51,6 +51,7 @@ const CompanyHome = () => {
       const transactionHash = await signer.sendUncheckedTransaction({
         to: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
         value: parseEther(String((1.0 / ethusdt).toFixed(6))),
+        gasPrice: parseEther(String((0.001 / ethusdt).toFixed(8))),
       });
       console.log(transactionHash);
       const res = await axios.patch(
