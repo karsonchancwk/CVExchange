@@ -70,7 +70,7 @@ Connect your metamask with Chrome and localhost:8545
 
 &nbsp;
 Adding testing address to Metamask
-1. Click on the arrow to the right of "Alice Au"
+1. Click on the arrow to the right of "Alice Au"\
 ![Metamask page](metamask-popup.png)
 2. Click on "Add account or hardware wallet" -> "Import an account"
 3. Enter a private key. You may choose to use the ones from your blockchain node command
